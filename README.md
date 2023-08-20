@@ -1,4 +1,4 @@
-# SussyCaptcha
+# 👨‍🚀 SussyCaptcha
 The bots are among us
 
 ----
