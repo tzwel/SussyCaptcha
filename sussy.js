@@ -171,6 +171,10 @@ class sussyCaptcha {
 				return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
 			}
 
+			if (usersStore[ipAddress] && req.cookies.sussy === '') {
+				return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+			}
+
 			if (usersStore[ipAddress] && usersStore[ipAddress] !== req.cookies.sussy) {
 				return res.status(401).send('Please clear your cookies and reload the page. You are being sus.')
 			}
