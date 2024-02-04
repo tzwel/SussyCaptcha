@@ -168,7 +168,7 @@ class sussyCaptcha {
 			return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
 		}
 
-		if (!req.headers['accept'] || !req.headers['connection']) {
+		if (!req.headers['accept'] || !req.headers['connection'] || !req.headers['cookie']) {
 			return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
 		}
 
