@@ -176,6 +176,9 @@ class sussyCaptcha {
 			}
 
 			if (usersStore[ipAddress] && usersStore[ipAddress] !== req.cookies.sussy) {
+				const token = randomBytes(128).toString('hex');
+				usersStore[ipAddress] = token;
+				res.cookie('sussy', token)
 				return res.status(401).send('Please clear your cookies and reload the page. You are being sus.')
 			}
 			
