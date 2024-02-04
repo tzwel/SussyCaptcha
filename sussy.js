@@ -176,11 +176,12 @@ class sussyCaptcha {
 			}
 
 			if (usersStore[ipAddress] && usersStore[ipAddress] !== req.cookies.sussy) {
-				const token = randomBytes(128).toString('hex');
-				usersStore[ipAddress] = token;
-				res.cookie('sussy', token)
+				console.log('user likely in incognito/old browser');
+				//const token = randomBytes(128).toString('hex');
+				//usersStore[ipAddress] = token;
+				//res.cookie('sussy', token)
 				//return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
-				return res.status(401).send('Please clear your cookies and reload the page.')
+				//return res.status(401).send('Please clear your cookies and reload the page.')
 			}
 			
 			const token = randomBytes(128).toString('hex');
