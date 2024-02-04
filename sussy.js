@@ -159,30 +159,32 @@ class sussyCaptcha {
 	}
 
 	secure = (req, res, next) => {
+		console.log(req.headers);
 		const ipAddress = req.header('x-forwarded-for') ||  	
 		req.socket.remoteAddress;
+
+		if (!req.headers['user-agent'] || req.headers['user-agent'].length < 20) {
+			// these "checks" do nothing
+			return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+		}
+
+		if (!req.headers['accept'] || !req.headers['connection']) {
+			return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+		}
+
+		if (usersStore[ipAddress] && req.cookies.sussy === '') {
+			return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+		}
+
 		if (!usersStore[ipAddress] || !req.cookies.sussy || usersStore[ipAddress] !== req.cookies.sussy) {
-			if (!req.headers['user-agent'] || req.headers['user-agent'].length < 15) {
-				// these "checks" do nothing
-				return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
-			}
-
-			if (!req.headers['accept'] || !req.headers['connection']) {
-				return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
-			}
-
-			if (usersStore[ipAddress] && req.cookies.sussy === '') {
-				return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
-			}
-
-			if (usersStore[ipAddress] && usersStore[ipAddress] !== req.cookies.sussy) {
-				console.log('user likely in incognito/old browser');
-				//const token = randomBytes(128).toString('hex');
-				//usersStore[ipAddress] = token;
-				//res.cookie('sussy', token)
-				//return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
-				//return res.status(401).send('Please clear your cookies and reload the page.')
-			}
+			
+			// if (usersStore[ipAddress] && usersStore[ipAddress] !== req.cookies.sussy) {
+			// 	const token = randomBytes(128).toString('hex');
+			// 	usersStore[ipAddress] = token;
+			// 	res.cookie('sussy', token)
+			// 	//return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+			// 	return res.status(401).send('Please clear your cookies and reload the page.')
+			// }
 			
 			const token = randomBytes(128).toString('hex');
 			usersStore[ipAddress] = token;
