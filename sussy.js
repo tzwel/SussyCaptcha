@@ -162,15 +162,28 @@ class sussyCaptcha {
 		const ipAddress = req.header('x-forwarded-for') ||  	
 		req.socket.remoteAddress;
 		if (!usersStore[ipAddress] || !req.cookies.sussy || usersStore[ipAddress] !== req.cookies.sussy) {
-		  const token = Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0");
-		  usersStore[ipAddress] = token;
-		  res.cookie('sussy', token)
-		  res.status(401)
-		  res.sendFile(path.join(__dirname, '/pages/check.html'))
+			if (!req.headers['user-agent'] || req.headers['user-agent'].length < 15) {
+				// these "checks" do nothing
+				return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+			}
+
+			if (!req.headers['accept'] || !req.headers['connection']) {
+				return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+			}
+
+			if (usersStore[ipAddress] && usersStore[ipAddress] !== req.cookies.sussy) {
+				return res.status(401).send('Please reload the page. You are being sus.')
+			}
+			
+			const token = randomBytes(128).toString('hex');
+			usersStore[ipAddress] = token;
+			res.cookie('sussy', token)
+			res.status(401)
+			res.sendFile(path.join(__dirname, '/pages/check.html'))
 		} else {
-		  next();
+			next();
 		}
-	  };
+	};
 
 	get token() {
 		return randomBytes(128)
