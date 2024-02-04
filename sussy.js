@@ -179,7 +179,8 @@ class sussyCaptcha {
 				const token = randomBytes(128).toString('hex');
 				usersStore[ipAddress] = token;
 				res.cookie('sussy', token)
-				return res.status(401).send('Please clear your cookies and reload the page. You are being sus.')
+				//return res.status(401).sendFile(path.join(__dirname, '/pages/check.html'))
+				return res.status(401).send('Please clear your cookies and reload the page.')
 			}
 			
 			const token = randomBytes(128).toString('hex');
